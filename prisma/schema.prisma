@@ -1,0 +1,57 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+enum role_user{
+  UTILISATEUR
+  GREFFIER
+  GREFFIER_CHEF
+  PROCUREUR
+}
+model utilisateur {
+  id                String @id @default(uuid()) @map("_id")
+  nom               String
+  email             String
+  password          String
+  role role_user    @default(UTILISATEUR)
+  refreshtoken      String?
+
+  notifications      notification[]
+  demandes           demande[]
+}
+
+
+model notification{
+  id                String @id @default(uuid()) @map("_id")
+  message           String
+
+  user              String
+  id_user           utilisateur @relation(fields: [user], references: [id], onDelete:Cascade)
+}
+
+
+
+enum statut_demande{
+  GREFFIER
+  GREFFIER_CHEF
+  PROCUREUR
+}
+model demande {
+  id                String @id @default(uuid()) @map("_id")
+  statut            statut_demande?
+
+  user              String
+  id_user           utilisateur @relation(fields: [user], references: [id], onDelete:Cascade)
+}
