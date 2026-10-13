@@ -202,7 +202,19 @@ D
             return res.status(httpCode.INTERNAL_SERVER_ERROR).json({message: error.message})
         }
 
-    }  
+    },
+    
+    deposer : async (req, res) => {
+        
+        try {
+            
+            //code avec multer...
+
+        } catch (error) {
+            return res.status(httpCode.INTERNAL_SERVER_ERROR).json({message: error.message})
+        }
+
+    }
 }
 
 export default userController
